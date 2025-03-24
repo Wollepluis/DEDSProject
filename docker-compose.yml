@@ -1,0 +1,45 @@
+services:
+    postgres:
+        image: postgres:latest
+        container_name: postgres
+        environment:
+            POSTGRES_PASSWORD: admin
+            POSTGRES_DB: unitedoutdoors
+            POSTGRES_USER: admin
+        restart: always
+        ports:
+            - "5432:5432"
+        volumes:
+            - database-storage2:/var/lib/postgresql/data
+        networks:
+            - app-network2
+
+    pgadmin:
+        image: dpage/pgadmin4
+        container_name: pgadmin
+        restart: always
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@email.com
+            PGADMIN_DEFAULT_PASSWORD: admin
+        ports:
+            - "8080:80"
+        networks:
+            - app-network2
+
+    superset:
+        image: apache/superset
+        container_name: apache-superset
+        restart: always
+        environment:
+            - SUPERSET_SECRET_KEY=D9FXGRvlzsplg4zKJSmXWtulbTY8krRdS4H8YtmMB/hVQ2jyhe4IxGeQ
+        ports:
+            - "8088:8088"
+        networks:
+            - app-network2
+
+volumes:
+    database-storage2:
+
+networks:
+    app-network2:
+        driver: bridge
